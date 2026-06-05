@@ -526,8 +526,7 @@ jobs:
         with:
           name: microbench-build-artifacts
           path: |
-            ${{ needs.setup.outputs.YSYX_HOME }}/am-kernels/benchmarks/microbench/build/*.bin
-            ${{ needs.setup.outputs.YSYX_HOME }}/am-kernels/benchmarks/microbench/build/*.elf
+            ${{ needs.setup.outputs.YSYX_HOME }}/am-kernels/benchmarks/microbench/build/
           if-no-files-found: ignore
 
   rt-thread:
