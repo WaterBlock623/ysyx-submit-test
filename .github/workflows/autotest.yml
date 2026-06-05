@@ -520,6 +520,15 @@ jobs:
         run: |
           KEY=$(head -c 5 /dev/urandom | base32)
           python $MONITOR_PY --good="$KEY" make ARCH=riscv32e-ysyxsoc -C $YSYX_HOME/am-kernels/benchmarks/microbench run mainargs=$KEY
+      - name: Upload Build Artifacts
+        if: always() 
+        uses: actions/upload-artifact@v4
+        with:
+          name: microbench-build-artifacts
+          path: |
+            ${{ needs.setup.outputs.YSYX_HOME }}/am-kernels/benchmarks/microbench/build/*.bin
+            ${{ needs.setup.outputs.YSYX_HOME }}/am-kernels/benchmarks/microbench/build/*.elf
+          if-no-files-found: ignore
 
   rt-thread:
     needs: setup
