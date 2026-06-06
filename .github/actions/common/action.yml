@@ -76,7 +76,7 @@ runs:
     - name: Install dependency for NVBoard
       shell: bash
       if: inputs.install-toolchain == 'true'
-      run: sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+      run: sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev liblz4-dev
 
     - name: Clone other repos
       shell: bash
