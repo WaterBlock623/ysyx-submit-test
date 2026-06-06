@@ -8,7 +8,7 @@ permissions:
   issues: write
 
 env:
-  OSS_CAD_SUITE_RELEASE_TAG: 2025-11-24
+  OSS_CAD_SUITE_RELEASE_TAG: 2026-05-15
 
 jobs:
   parse:
