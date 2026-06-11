@@ -127,9 +127,8 @@ jobs:
         with:
           repository: ${{ needs.parse.outputs.REPO_PATH }}
           ref: ${{ needs.parse.outputs.BRANCH }}
-          token: ${{ secrets.GITHUB_TOKEN }} 
+          token: ${{ secrets.YSYX_TOKEN }} 
           path: ${{ steps.set-ysyx-home.outputs.YSYX_HOME }}
-          depth: 1
 
       - name: Create orphan branch
         run: |
