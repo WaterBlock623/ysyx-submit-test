@@ -16,6 +16,7 @@ jobs:
     outputs:
       STUID:  ${{ steps.parse.outputs.STUID }}
       REPO:   ${{ steps.parse.outputs.REPO }}
+      REPO_PATH: ${{ steps.parse.outputs.REPO_PATH }}
       BRANCH: ${{ steps.parse.outputs.BRANCH }}
       MAKEJOBS: ${{ steps.parse.outputs.MAKEJOBS }}
       COMMENT_ID: ${{ steps.comment-id.outputs.COMMENT_ID }}
@@ -35,9 +36,11 @@ jobs:
         run: |
           STUID=$(echo "${{ github.event.issue.body }}" | sed -n -e '3p')
           REPO=$(echo "${{ github.event.issue.body }}" | sed -n -e '7p')
+          REPO_PATH=$(echo "$REPO" | sed -E 's|https://github.com/||; s|\.git$||')
           BRANCH=$(echo "${{ github.event.issue.body }}" | sed -n -e '11p')
           echo "STUID=$STUID" >> $GITHUB_OUTPUT
           echo "REPO=$REPO" >> $GITHUB_OUTPUT
+          echo "REPO_PATH=$REPO_PATH" >> $GITHUB_OUTPUT
           echo "BRANCH=$BRANCH" >> $GITHUB_OUTPUT
 
           sudo timedatectl set-timezone Asia/Shanghai
@@ -113,11 +116,20 @@ jobs:
           echo "YSYX_HOME=$YSYX_HOME" >> $GITHUB_ENV
           echo "YSYX_HOME=$YSYX_HOME" >> $GITHUB_OUTPUT
 
+      # - name: Clone target repo
+      #  run: |
+      #    mkdir -p $YSYX_HOME
+      #    cd $YSYX_HOME/..
+      #    git clone --depth 1 -b ${{ needs.parse.outputs.BRANCH }} ${{ needs.parse.outputs.REPO }} ysyx-workbench
+
       - name: Clone target repo
-        run: |
-          mkdir -p $YSYX_HOME
-          cd $YSYX_HOME/..
-          git clone --depth 1 -b ${{ needs.parse.outputs.BRANCH }} ${{ needs.parse.outputs.REPO }} ysyx-workbench
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.parse.outputs.REPO_PATH }}
+          ref: ${{ needs.parse.outputs.BRANCH }}
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          path: ${{ steps.set-ysyx-home.outputs.YSYX_HOME }}
+          depth: 1
 
       - name: Create orphan branch
         run: |
